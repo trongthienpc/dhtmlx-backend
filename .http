@@ -1,0 +1,17 @@
+POST http://localhost:1337/data/task
+Content-Type: application/json
+
+{
+    
+  "text": "room 1",
+  "start_date": "2017-04-01 00:00:00",
+  "duration": 5,
+  "progress": 0.8,
+  "parent": 0
+}
+
+
+
+###########
+
+GET http://localhost:1337/data
