@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 const moment = require("moment");
 const cors = require("cors");
 const e = require("express");
+const { send } = require("process");
 require("date-format-lite");
 require("dotenv").config();
 var port = 1337;
@@ -56,6 +57,18 @@ app.get("/data", async (req, res) => {
   }
 });
 
+// get task by id
+app.get("/data/task/:id", async (req, res) => {
+  let id = req.params.id;
+  const entity = await taskModel
+    .findOne({ id: id })
+    .then((response) => {
+      sendResponse(res, "find", response);
+    })
+    .catch((error) => console.log(error));
+  return entity;
+});
+
 app.post("/data/task", async (req, res) => {
   console.log(req.body);
   var task = getTask(req.body);
@@ -77,9 +90,24 @@ app.post("/data/task", async (req, res) => {
   }
 });
 
+// update task
+app.put("/data/task/:id", async (req, res) => {
+  const sid = req.params.id;
+  const newTask = getTask(req.body);
+  console.log(newTask);
+  try {
+    const q = await taskModel
+      .updateOne({ id: sid }, newTask)
+      .then((response) => {
+        sendResponse(res, "updated", response);
+      });
+  } catch (error) {
+    sendResponse(error, "error", null, error);
+  }
+});
+
 // delete all
 app.delete("/data/task/delete", async function (req, res) {
-
   const response = await taskModel
     .deleteMany({})
     .then(() => {
@@ -104,6 +132,18 @@ app.delete("/data/task/:id", function (req, res) {
     });
 });
 
+// find all childrens
+app.get("/data/task/child/:id", async (req, res) => {
+  let id = req.params.id;
+  const childrens = await taskModel
+    .find({ parent: id })
+    .then((response) => {
+      sendResponse(res, "find childrens", response);
+    })
+    .catch((error) => {
+      sendResponse(res, "find childrens error", error);
+    });
+});
 
 function getTask(data) {
   return {
@@ -113,6 +153,7 @@ function getTask(data) {
     duration: data.duration,
     progress: data.progress || 0,
     parent: data.parent,
+    phone: data.phone,
   };
 }
 
