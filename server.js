@@ -77,12 +77,25 @@ app.post("/data/task", async (req, res) => {
   }
 });
 
+// delete all
+app.delete("/data/task/delete", async function (req, res) {
+
+  const response = await taskModel
+    .deleteMany({})
+    .then(() => {
+      sendResponse(res, "deleted all");
+    })
+    .catch(function (error) {
+      sendResponse(res, "error", null, error);
+    });
+});
+
 // delete a task
 app.delete("/data/task/:id", function (req, res) {
   var sid = req.params.id;
   console.log(sid);
   const response = taskModel
-    .findOneAndDelete(sid)
+    .findOneAndDelete({ id: sid })
     .then(() => {
       sendResponse(res, "deleted");
     })
@@ -90,6 +103,7 @@ app.delete("/data/task/:id", function (req, res) {
       sendResponse(res, "error", null, error);
     });
 });
+
 
 function getTask(data) {
   return {
