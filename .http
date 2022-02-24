@@ -15,3 +15,7 @@ Content-Type: application/json
 ###########
 
 GET http://localhost:1337/data
+
+
+##########
+DELETE http://localhost:1337/data/task/21

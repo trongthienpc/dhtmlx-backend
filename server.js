@@ -59,13 +59,13 @@ app.get("/data", async (req, res) => {
 app.post("/data/task", async (req, res) => {
   console.log(req.body);
   var task = getTask(req.body);
-  let id = 0;
-  const tasks = await taskModel.find({}).then((response) => {
-    id = response.length + 1;
-    task.id = id;
-  });
+  // let id = 0;
+  // const tasks = await taskModel.find({}).then((response) => {
+  //   id = response.length + 1;
+  //   task.id = id;
+  // });
 
-  console.log("task: ", task);
+  // console.log("task: ", task);
 
   const newTask = new taskModel(task);
   try {
@@ -108,7 +108,10 @@ function sendResponse(res, action, tid, error) {
   var result = {
     action: action,
   };
-  if (tid !== undefined && tid !== null) result.tid = tid;
+  if (tid !== undefined && tid !== null) {
+    result.tid = tid;
+    result.success = true;
+  }
 
   res.send(result);
 }
