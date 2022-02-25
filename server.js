@@ -17,10 +17,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 app.use(express.json());
 
-app.listen(port, function () {
-  console.log("server is running on port " + port + "...");
+app.listen(process.env.PORT || 1337, "0.0.0.0", () => {
+  console.log("Server is running.");
 });
-
 const connectDB = async () => {
   try {
     await mongoose.connect(
